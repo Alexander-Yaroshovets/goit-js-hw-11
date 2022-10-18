@@ -6,6 +6,7 @@ import { refs } from './refs';
 import { pixabayApi } from './pixabayApi';
 import { createMarkup } from './markup';
 const pixabay = new pixabayApi();
+const lightbox = new SimpleLightbox('.photo-card a');
 
 const handleSubmit = async event => {
   event.preventDefault();
@@ -31,7 +32,7 @@ const handleSubmit = async event => {
     Notify.info(`Hooray! We found ${total} images.`);
     const markup = createMarkup(hits);
     refs.galleryEl.insertAdjacentHTML('beforeend', markup);
-    const lightbox = new SimpleLightbox('.photo-card a');
+    lightbox.refresh();
     pixabay.calculateTotalPages(total);
     if (pixabay.isShownLoadMore) {
       refs.loadMoreEl.classList.remove('is-hidden');
@@ -55,7 +56,6 @@ const handleClick = async () => {
     const { hits } = await pixabay.getPhoto();
     const markup = createMarkup(hits);
     refs.galleryEl.insertAdjacentHTML('beforeend', markup);
-    const lightbox = new SimpleLightbox('.photo-card a');
     lightbox.refresh();
   } catch (error) {
     Notify.failure(error.message);
